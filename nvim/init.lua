@@ -1,0 +1,178 @@
+vim.g.mapleader = ' '
+vim.g.maplocalleader = ' '
+vim.g.have_nerd_font = true
+
+vim.o.number = true
+vim.o.relativenumber = true
+vim.o.mouse = 'a'
+vim.o.showmode = false
+vim.o.breakindent = true
+vim.o.undofile = true
+vim.o.ignorecase = true
+vim.o.smartcase = true
+vim.o.cursorline = true
+vim.o.scrolloff = 8
+vim.o.confirm = true
+vim.o.shiftwidth = 4
+vim.o.tabstop = 4
+vim.o.showtabline = 4
+vim.o.winborder = 'rounded'
+vim.o.clipboard = 'unnamedplus'
+vim.o.shell = 'fish'
+vim.o.swapfile = false
+vim.o.updatetime = 256
+vim.o.timeoutlen = 256
+vim.opt.showtabline = 0
+
+vim.api.nvim_create_autocmd('TextYankPost', {
+  desc = 'Highlight when yanking text',
+  group = vim.api.nvim_create_augroup('highlight-yank', { clear = true }),
+  callback = function()
+    vim.hl.on_yank()
+  end,
+})
+
+local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
+if not (vim.uv or vim.loop).fs_stat(lazypath) then
+  local lazyrepo = 'https://github.com/folke/lazy.nvim.git'
+  local out = vim.fn.system { 'git', 'clone', '--filter=blob:none', '--branch=stable', lazyrepo, lazypath }
+  if vim.v.shell_error ~= 0 then
+    error('Error cloning lazy.nvim:\n' .. out)
+  end
+end
+
+vim.opt.rtp:prepend(lazypath)
+
+require('lazy').setup({
+  {
+    'rebelot/kanagawa.nvim',
+    config = function()
+      vim.cmd.colorscheme('kanagawa-dragon')
+    end
+  },
+  {
+    'stevearc/oil.nvim',
+    ---@module 'oil'
+    ---@type oil.SetupOpts
+    opts = {},
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+  },
+  {
+    'nvim-treesitter/nvim-treesitter',
+    build = ':TSUpdate',
+    main = 'nvim-treesitter.configs',
+    opts = {
+      ensure_installed = { 'bash', 'c', 'diff', 'lua', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
+      auto_install = true,
+      highlight = {
+        enable = true,
+        additional_vim_regex_highlighting = false,
+      },
+    },
+  },
+  {
+    'nvim-telescope/telescope.nvim',
+    event = 'VimEnter',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
+      { 'nvim-telescope/telescope-ui-select.nvim' },
+      { 'nvim-tree/nvim-web-devicons',              enabled = vim.g.have_nerd_font },
+    },
+    config = function()
+      require('telescope').setup {
+        defaults = {
+          mappings = {
+            n = {
+              ['dd'] = require('telescope.actions').delete_buffer
+            },
+          },
+        },
+        extensions = {
+          ['ui-select'] = {
+            require('telescope.themes').get_dropdown(),
+          },
+        },
+      }
+
+      pcall(require('telescope').load_extension, 'fzf')
+      pcall(require('telescope').load_extension, 'ui-select')
+
+      vim.keymap.set('n', '<leader>sf', require('telescope.builtin').find_files)
+      vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep)
+      vim.keymap.set('n', '<leader>sb', require('telescope.builtin').buffers)
+      vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics)
+      vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags)
+      vim.keymap.set('n', '<leader>sk', require('telescope.builtin').keymaps)
+      vim.keymap.set('n', '<leader>so', require('telescope.builtin').oldfiles)
+      vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string)
+      vim.keymap.set('n', '<leader>sm', require('telescope.builtin').man_pages)
+      vim.keymap.set('n', '<leader>sr', require('telescope.builtin').lsp_references)
+      vim.keymap.set('n', '<leader>sn', function()
+        require('telescope.builtin').find_files {
+          cwd = vim.fn.stdpath('config')
+        }
+      end)
+    end,
+  },
+  {
+    'mason-org/mason.nvim',
+    opts = {}
+  },
+  {
+    'echasnovski/mini.nvim',
+    config = function()
+      require('mini.ai').setup { n_lines = 500 }
+      require('mini.surround').setup()
+
+      local statusline = require 'mini.statusline'
+      statusline.setup { use_icons = vim.g.have_nerd_font }
+    end
+  },
+  {
+    'MeanderingProgrammer/render-markdown.nvim',
+    dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
+    ---@module 'render-markdown'
+    ---@type render.md.UserConfig
+    opts = {},
+  }
+})
+
+vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
+
+vim.keymap.set('n', '<leader>fl', function()
+  local opts = {
+    formatting_options = {
+      tabSize = 2,
+      insertSpaces = true,
+      trimTrailingWhitespace = true
+    },
+    async = false
+  }
+  vim.lsp.buf.format(opts)
+end)
+
+vim.keymap.set('n', '<C-j>', '<cmd>cnext<CR>')
+vim.keymap.set('n', '<C-k>', '<cmd>cprev<CR>')
+
+vim.keymap.set('n', '<leader>e', '<cmd>Oil<CR>')
+
+vim.keymap.set('n', '<leader>od', function()
+  vim.diagnostic.open_float()
+end)
+
+vim.api.nvim_create_autocmd('LspAttach', {
+  group = vim.api.nvim_create_augroup('my.lsp', {}),
+  callback = function(args)
+    local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
+    if client:supports_method('textDocument/completion') then
+      -- Optional: trigger autocompletion on EVERY keypress. May be slow!
+      local chars = {}; for i = 32, 126 do table.insert(chars, string.char(i)) end
+      client.server_capabilities.completionProvider.triggerCharacters = chars
+      vim.lsp.completion.enable(true, client.id, args.buf, { autotrigger = true })
+    end
+  end,
+})
+vim.cmd [[set completeopt+=menuone,noselect,popup]]
+
+vim.lsp.enable({ 'lua_ls', 'pyrefly' })
