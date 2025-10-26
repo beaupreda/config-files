@@ -20,8 +20,7 @@ vim.o.winborder = 'rounded'
 vim.o.clipboard = 'unnamedplus'
 vim.o.shell = 'fish'
 vim.o.swapfile = false
-vim.o.updatetime = 256
-vim.o.timeoutlen = 256
+vim.o.timeoutlen = 512
 vim.opt.showtabline = 0
 
 vim.api.nvim_create_autocmd('TextYankPost', {
@@ -98,21 +97,24 @@ require('lazy').setup({
       pcall(require('telescope').load_extension, 'fzf')
       pcall(require('telescope').load_extension, 'ui-select')
 
-      vim.keymap.set('n', '<leader>sf', require('telescope.builtin').find_files)
-      vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep)
-      vim.keymap.set('n', '<leader>sb', require('telescope.builtin').buffers)
-      vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics)
-      vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags)
-      vim.keymap.set('n', '<leader>sk', require('telescope.builtin').keymaps)
-      vim.keymap.set('n', '<leader>so', require('telescope.builtin').oldfiles)
-      vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string)
-      vim.keymap.set('n', '<leader>sm', require('telescope.builtin').man_pages)
-      vim.keymap.set('n', '<leader>sr', require('telescope.builtin').lsp_references)
-      vim.keymap.set('n', '<leader>sn', function()
+      vim.keymap.set('n', '<leader>ff', require('telescope.builtin').find_files, { desc = 'Telescope find files.' })
+      vim.keymap.set('n', '<leader>fg', require('telescope.builtin').live_grep, { desc = 'Telescope grep string.' })
+      vim.keymap.set('n', '<leader><leader>', require('telescope.builtin').buffers,
+        { desc = 'Telescope opened buffers.' })
+      vim.keymap.set('n', '<leader>fd', require('telescope.builtin').diagnostics, { desc = 'Telescope diagnostics.' })
+      vim.keymap.set('n', '<leader>fh', require('telescope.builtin').help_tags, { desc = 'Telescope Neovim help.' })
+      vim.keymap.set('n', '<leader>fk', require('telescope.builtin').keymaps, { desc = 'Telescope keymaps.' })
+      vim.keymap.set('n', '<leader>fo', require('telescope.builtin').oldfiles, { desc = 'Telescope old files.' })
+      vim.keymap.set('n', '<leader>fw', require('telescope.builtin').grep_string,
+        { desc = 'Telescope grep word under cursor.' })
+      vim.keymap.set('n', '<leader>fm', require('telescope.builtin').man_pages, { desc = 'Telescope man pages.' })
+      vim.keymap.set('n', '<leader>fr', require('telescope.builtin').lsp_references,
+        { desc = 'Telescope find LSP references.' })
+      vim.keymap.set('n', '<leader>fn', function()
         require('telescope.builtin').find_files {
           cwd = vim.fn.stdpath('config')
         }
-      end)
+      end, { desc = 'Telescope find Neovim config files.' })
     end,
   },
   {
@@ -150,16 +152,16 @@ vim.keymap.set('n', '<leader>fl', function()
     async = false
   }
   vim.lsp.buf.format(opts)
-end)
+end, { desc = 'For Lua buffer.' })
 
-vim.keymap.set('n', '<C-j>', '<cmd>cnext<CR>')
-vim.keymap.set('n', '<C-k>', '<cmd>cprev<CR>')
+vim.keymap.set('n', '<C-j>', '<cmd>cnext<CR>', { desc = 'Go down in quickfix list.' })
+vim.keymap.set('n', '<C-k>', '<cmd>cprev<CR>', { desc = 'Go up in quickfix list.' })
 
-vim.keymap.set('n', '<leader>e', '<cmd>Oil<CR>')
+vim.keymap.set('n', '<leader>e', '<cmd>Oil<CR>', { desc = 'Open Oil' })
 
-vim.keymap.set('n', '<leader>od', function()
+vim.keymap.set('n', '<leader>d', function()
   vim.diagnostic.open_float()
-end)
+end, { desc = 'Open float diagnostic.' })
 
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('my.lsp', {}),
