@@ -20,7 +20,7 @@ button {
 }
 
 #workspaces button {
-    color: @blue;
+    color: @dark-gray;
 }
 
 #workspaces button:hover {
@@ -42,8 +42,8 @@ button {
 #bluetooth,
 #pulseaudio {
     padding: 0 10px;
-    color: @aqua;
-    border-bottom: 2px solid @aqua;
+    color: @light-gray;
+    border-bottom: 2px solid @light-gray;
     margin-left: 5px; 
     margin-right: 5px;
 }

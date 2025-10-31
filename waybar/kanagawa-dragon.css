@@ -1,11 +1,6 @@
-@define-color text #c8c093;
 @define-color base #1d1c19;
-@define-color surface #393836;
-@define-color blue #8ba4b0;
-@define-color pink #a292a3;
-@define-color teal #949fb5;
-@define-color orange #b6927b;
+@define-color dark-gray #625e5a;
+@define-color light-gray #9e9b93;
 @define-color red #c4746e;
-@define-color yellow #c4b28a;
+@define-color text #c8c093;
 @define-color violet #8992a7;
-@define-color aqua #8ea4a2;

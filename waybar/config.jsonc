@@ -33,7 +33,7 @@
         "separate-outputs": true,
     },
     "custom/startup":{
-        "format": "<span color='#8ba4b0'> </span>",
+        "format": "<span color='#c8c093'> </span>",
         "on-click": "rofi -show drun &"
     },
     "hyprland/workspaces": {
