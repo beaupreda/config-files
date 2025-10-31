@@ -1,0 +1,100 @@
+{
+    "position": "top",
+    "margin-top": 20,
+    "margin-bottom" : 0,
+    "margin-left": 20,
+    "margin-right": 20,
+    "height" : 40,
+    "modules-left": [
+        "custom/startup",
+        "hyprland/workspaces"
+    ],
+    "modules-center": [
+        "hyprland/window"
+    ],
+    "modules-right": [
+        "cpu",
+        "memory",
+        "pulseaudio",
+        "network",
+        "bluetooth",
+        "clock",
+    ],
+    "hyprland/window": {
+        "format": "{}",
+        "max-length": 25,
+        "rewrite": {
+            "": "Arch Linux",
+            ".*Firefox.*": "Firefox",
+	    ".*Discord.*": "Discord",
+	    ".*Steam.*": "Steam",
+	    "bash": "Terminal"
+        },
+        "separate-outputs": true,
+    },
+    "custom/startup":{
+        "format": "<span color='#8ba4b0'> </span>",
+        "on-click": "rofi -show drun &"
+    },
+    "hyprland/workspaces": {
+        "format": "{icon}",
+        "on-click": "activate",
+        "format-icons": {
+            "active": "",
+            "1" : "",
+            "2" : "",
+            "3" : "",
+            "4" : "",
+            "5" : "",
+            "6" : "",
+            "7" : "",
+            "8" : "",
+            "9" : "",
+            "10" : "",
+          },
+          "sort-by-number": false,
+          "persistent-workspaces": {
+              "*": 5
+          },
+    },
+    "clock": {
+        "format": " {:%a %d-%m   %H:%M}",
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        "on-click" : "~/.config/waybar/scripts/calendar.sh"
+    },
+    "cpu": {
+        "format": "  {usage}%",
+        "tooltip": false
+    },
+    "memory": {
+        "format": "  {}%"
+    },
+    "network": {
+        "format-wifi": " ",
+        "format-ethernet": " {cidr}",
+        "format-linked": "{ifname} (No IP) 󱚼",
+        "format-disconnected": " 󱚼 ",
+        "on-click": "~/.config/waybar/scripts/network.sh",
+    },
+    "bluetooth": {
+        "format" : "{icon}",
+        "format-icons": ["󰂯"],
+        "on-click" : "blueman-manager",
+    },
+    "pulseaudio": {
+        "format": "{icon}  {volume}%",
+        "format-bluetooth": "{icon} {volume}%",
+        "format-bluetooth-muted": "{icon} ",
+        "format-muted": "󰝟 ",
+        "format-icons": {
+            "headphone": " ",
+            "hands-free": " ",
+            "headset": " ",
+            "phone": " ",
+            "portable": " ",
+            "car": " ",
+            "default": ["", "", ""]
+        },
+        "on-click": "pavucontrol"
+    }
+}

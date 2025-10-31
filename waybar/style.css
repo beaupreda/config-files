@@ -1,0 +1,75 @@
+@import "kanagawa-dragon.css";
+
+* {
+    font-family: "JetBrainsMono Nerd Font";
+    font-size: 18px;
+}
+
+window#waybar {
+    background-color: @base;
+    border-radius: 10px;
+}
+
+button {
+	box-shadow: 0 8px;
+    background-color: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 0 8px;
+	text-decoration: none;
+}
+
+#workspaces button {
+    color: @blue;
+}
+
+#workspaces button:hover {
+    background: @base;
+}
+
+#workspaces button.focused {
+    color: @violet;
+}
+
+#workspaces button.urgent {
+    color: @red;
+}
+
+#clock,
+#cpu,
+#memory,
+#network,
+#bluetooth,
+#pulseaudio {
+    padding: 0 10px;
+    color: @aqua;
+    border-bottom: 2px solid @aqua;
+    margin-left: 5px; 
+    margin-right: 5px;
+}
+
+#bluetooth {
+    font-size: 24px;
+}
+
+#window {
+    color: @text;
+}
+
+.modules-right,
+.modules-left,
+.modules-center {
+    background-color: @base;
+    border-radius: 15px;
+}
+.modules-right {
+    padding: 0 10px;
+}
+
+.modules-left {
+    padding: 0 20px;
+}
+
+.modules-center {
+    padding: 0 10px;
+}
