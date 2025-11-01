@@ -124,16 +124,13 @@ require('lazy').setup({
   {
     'echasnovski/mini.nvim',
     config = function()
-      require('mini.ai').setup { n_lines = 500 }
-      require('mini.surround').setup()
-
       local statusline = require 'mini.statusline'
       statusline.setup { use_icons = vim.g.have_nerd_font }
     end
   },
   {
     'MeanderingProgrammer/render-markdown.nvim',
-    dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
+    dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' },
     ---@module 'render-markdown'
     ---@type render.md.UserConfig
     opts = {},
@@ -152,7 +149,7 @@ vim.keymap.set('n', '<leader>fl', function()
     async = false
   }
   vim.lsp.buf.format(opts)
-end, { desc = 'For Lua buffer.' })
+end, { desc = 'Format Lua buffer.' })
 
 vim.keymap.set('n', '<C-j>', '<cmd>cnext<CR>', { desc = 'Go down in quickfix list.' })
 vim.keymap.set('n', '<C-k>', '<cmd>cprev<CR>', { desc = 'Go up in quickfix list.' })
