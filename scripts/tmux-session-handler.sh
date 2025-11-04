@@ -5,6 +5,7 @@ DIRECTORIES=(
 	"$HOME/codex"
 	"$HOME/config-files"
 	"$HOME/processing"
+	"$HOME/references"
 )
 
 # One argument was provided, select it as a directory.
