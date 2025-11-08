@@ -174,4 +174,4 @@ vim.api.nvim_create_autocmd('LspAttach', {
 })
 vim.cmd [[set completeopt+=menuone,noselect,popup]]
 
-vim.lsp.enable({ 'lua_ls', 'pyrefly', 'clangd', 'cmake' })
+vim.lsp.enable({ 'lua_ls', 'pyrefly', 'clangd', 'cmake', 'tinymist' })
