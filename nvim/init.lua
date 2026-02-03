@@ -59,15 +59,10 @@ require('lazy').setup({
   {
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
-    main = 'nvim-treesitter.configs',
-    opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'lua', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
-      auto_install = true,
-      highlight = {
-        enable = true,
-        additional_vim_regex_highlighting = false,
-      },
-    },
+    branch = 'main',
+    config = function()
+      require('nvim-treesitter').setup {}
+    end
   },
   {
     'nvim-telescope/telescope.nvim',
@@ -134,6 +129,26 @@ require('lazy').setup({
     ---@module 'render-markdown'
     ---@type render.md.UserConfig
     opts = {},
+  },
+  {
+    'neovim/nvim-lspconfig',
+    config = function()
+      vim.lsp.enable({ 'lua_ls', 'ruff', 'tinymist', 'ty' })
+    end
+  },
+  {
+    'saghen/blink.cmp',
+    version = '1.*',
+    ---@module 'blink.cmp'
+    ---type blink.cmp.Config
+    opts = {
+      keymap = { preset = 'default' },
+      completion = { documentation = { auto_show = false } },
+      sources = {
+        default = { 'lsp', 'path', 'snippets', 'buffer' },
+      },
+      fuzzy = { implementation = 'prefer_rust_with_warning' }
+    },
   }
 })
 
@@ -160,18 +175,14 @@ vim.keymap.set('n', '<leader>d', function()
   vim.diagnostic.open_float()
 end, { desc = 'Open float diagnostic.' })
 
-vim.api.nvim_create_autocmd('LspAttach', {
-  group = vim.api.nvim_create_augroup('my.lsp', {}),
-  callback = function(args)
-    local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
-    if client:supports_method('textDocument/completion') then
-      -- Optional: trigger autocompletion on EVERY keypress. May be slow!
-      local chars = {}; for i = 32, 126 do table.insert(chars, string.char(i)) end
-      client.server_capabilities.completionProvider.triggerCharacters = chars
-      vim.lsp.completion.enable(true, client.id, args.buf, { autotrigger = true })
-    end
-  end,
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'bash', 'c', 'diff', 'fish', 'lua', 'markdown', 'markdown_inline', 'python', 'query', 'rust', 'typst', 'vim', 'vimdoc' },
+  callback = function() vim.treesitter.start() end,
 })
-vim.cmd [[set completeopt+=menuone,noselect,popup]]
 
-vim.lsp.enable({ 'lua_ls', 'pyrefly', 'clangd', 'cmake', 'tinymist' })
+vim.lsp.config('rust_analyzer', {
+  settings = {
+    ['rust-analyzer'] = {},
+  },
+})
+vim.lsp.enable('rust_analyzer')
