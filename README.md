@@ -17,6 +17,7 @@ This repository contains all the configuration files for the different programs 
 
 ## Other Useful Tools
 - [fzf](https://github.com/junegunn/fzf)
+- [lazygit](https://github.com/jesseduffield/lazygit)
 - [fd](https://github.com/sharkdp/fd)
 - [ripgrep](https://github.com/BurntSushi/ripgrep)
 - [bat](https://github.com/sharkdp/bat)
